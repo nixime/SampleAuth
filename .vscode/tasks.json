@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Docker Build - Test",
+            "type": "shell",
+            "command": "podman",
+            "args": [
+                "build",
+                "--target",
+                "test",
+                "."
+            ],
+            "group" : {
+                "kind" : "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Docker Build - Deploy",
+            "type": "shell",
+            "command": "podman",
+            "args": [
+                "build",
+                "."
+            ],
+            "group" : {
+                "kind" : "build",
+            }
+        }
+    ]
+}
