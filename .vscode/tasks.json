@@ -4,7 +4,7 @@
         {
             "label": "Docker Build - Test",
             "type": "shell",
-            "command": "podman",
+            "command": "docker",
             "args": [
                 "build",
                 "--target",
@@ -19,7 +19,7 @@
         {
             "label": "Docker Build - Deploy",
             "type": "shell",
-            "command": "podman",
+            "command": "docker",
             "args": [
                 "build",
                 "."
