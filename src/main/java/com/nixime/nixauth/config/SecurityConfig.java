@@ -1,11 +1,12 @@
 package com.nixime.nixauth.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -28,8 +30,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nixime.nixauth.provider.CustomAuthenticationProvider;
-
-import static org.springframework.security.config.Customizer.*;
+import com.nixime.nixauth.provider.LdapAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -46,19 +47,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authProvider() {
-		if( "local".equals(authProps.type()) ) {
-			CustomAuthenticationProvider authenticationProvider = new CustomAuthenticationProvider();
-			return authenticationProvider;
-		}
-		return null;
-    }
-
-    @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = 
             http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(authProvider());
+
+		if( "local".equals(authProps.type()) ) {
+	        authenticationManagerBuilder.authenticationProvider(new CustomAuthenticationProvider());
+		} else {
+	        authenticationManagerBuilder.authenticationProvider(new LdapAuthenticationProvider());
+		}
         return authenticationManagerBuilder.build();
     }
 

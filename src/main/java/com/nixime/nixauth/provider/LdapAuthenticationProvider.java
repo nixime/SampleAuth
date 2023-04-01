@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+public class LdapAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) 
@@ -22,7 +22,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if ( name.equals(null) || password.equals(null) ) 
             throw new BadCredentialsException("Bad Credentials");
 
-        if( "sakura".equals(name) && "password".equals(password) ) {
+        if( "root".equals(name) && "password".equals(password) ) {
             // use the credentials
             // and authenticate against the third-party system
             return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
