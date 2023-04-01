@@ -5,9 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.nixime.nixauth.config.RsaKeyProperties;
+import com.nixime.nixauth.config.AuthenticationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(RsaKeyProperties.class)
+@EnableConfigurationProperties({RsaKeyProperties.class,AuthenticationProperties.class})
 public class NixauthApplication {
 
 	public static void main(String[] args) {
